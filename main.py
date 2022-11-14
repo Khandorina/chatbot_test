@@ -31,10 +31,13 @@ def send_photo_file(chat_id, img):
 def find_rests(user_id, db):
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users WHERE user_id = {}".format(user_id))
-    r = cursor.fetchall() # print(r): [(1091335251, '57.15024', '65.58873', '1 км', 'европейская')]
+    r = cursor.fetchall() # print(r): [(1091335251, '57.15024', '65.58873', '1 км', 'европейская', '$$$')]
     cursor.close()
-    
 
+    #Вот тут должен вызываться метод который вернет рестораны по умному алгоритму
+    #вида return restorani(r[0],r[1],r[2],r[3],r[4],r[5])
+    #или return restorani(r)
+    return "Рестораны: нету"
 
 def check_message(m,db):
     chat_id = m['message']['chat']['id']
@@ -80,6 +83,7 @@ def check_message(m,db):
         cursor.close()
 
         rests = find_rests(user_id, db)
+        send_message(chat_id,rests)
 
     else:
         reply_markup ={ "keyboard": [["Оценить ресторан"], [{"request_location":True, "text":"Найти ресторан"}]], "resize_keyboard": True, "one_time_keyboard": True}
